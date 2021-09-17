@@ -1,0 +1,5 @@
+dbcfg.py
+*.txt
+venv/
+.idea
+__pycache__/
