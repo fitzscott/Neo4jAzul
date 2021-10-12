@@ -26,8 +26,12 @@ class LoadGameResults():
         fl = open(self._flnm)
         prevgame = ""
         playpos = -1
+        inscnt = 0
         for ln in fl:
             flds = ln.strip().split()
+            if len(flds) < 5:
+                print("not enough fields " + ln)
+                continue
             gameid = flds[0]
             if gameid != prevgame:
                 playpos = 1
@@ -57,9 +61,13 @@ class LoadGameResults():
             CREATE (g)<-[:PLAYS_IN]-(gp)
             CREATE (gp)-[:USES]->(ss)
             """.format(strats, gameid, winloss, scor, savflnm, playpos)
-            print(cr)
+            # print(cr)
             self._sess.run(cr)
+            inscnt += 1
+            if inscnt % 100 == 0:
+                print("{0} game players & {1} games added".format(inscnt, inscnt // 4))
         fl.close()
+        print("{0} game players & {1} games added".format(inscnt, inscnt / 4))
         self.disconnect()
 
 if __name__ == "__main__":
