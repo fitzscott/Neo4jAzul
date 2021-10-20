@@ -25,12 +25,16 @@ class LoadStratSet():
         weights = [max(r, 1) for r in range(maxwgt, maxwgt - stratcnt, -1)]
         return ("".join([str(w) for w in weights]))
 
-    def load2neo(self):
+    def load2neo(self, clearOut=True):
         # connect to Neo4j
         # get data from file
         # load data to Neo
         # disconnect
         self.connect()
+        if clearOut:
+            clr = "MATCH (x) DETACH DELETE x"
+            self._sess.run(clr)
+            print("Mass delete complete (maybe)")
         savflnm = self._flnm.split("\\")[-1]
         # create the source file name
         cr1 = """
